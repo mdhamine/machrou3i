@@ -23,13 +23,15 @@
         </div>
 
         <!-- Navigation Links -->
-        <div class="flex space-x-8">
-          <a href="/" class="text-white hover:text-blue-200">Home</a>
+               <!-- Navigation Links -->
+        <div class="flex space-x-8 md:mx-6 sm:mx-5 sm:text-sm md:text-sm ">
+          <a href="/" class="text-white hover:text-blue-200 mx-4">Home</a>
           <a href="/login" class="text-white hover:text-blue-200">login</a>
           <a href="#svgs" class="text-white hover:text-blue-200">About</a>
-          <a href="#contact" class="text-white hover:text-blue-200">Contact Us</a>
-          <a href="#services" class="text-white hover:text-blue-200">our services</a>
+          <a href="#contact" class="text-white hover:text-blue-200 smoll:hidden">Contact </a>
+          <a href="#services" class="text-white hover:text-blue-200 mx-7">services</a>
         </div>
+        
         
         <div class="text-white text-sm mt-7 py-9">
           <p>Contact us at contact@machrou3i.online</p>
