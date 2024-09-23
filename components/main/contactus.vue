@@ -4,7 +4,7 @@
             <div class="container mx-auto px-4 "  id="contact">
               <h2 class="text-4xl  mb-8 font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-800 via-sky-500 to-blue-400 ">Reach out to us!</h2>
               <p class="text-xl max-w-xl mx-auto mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-800 via-sky-500 to-blue-400 font-bold">You can contact us through this form or submit your plan order!</p>
-              <form id="buy" class="bg-gradient-to-tr from-blue-700 via-sky-500 to-blue-300 max-w-lg mx-auto bg-white p-6 rounded-2xl shadow-lg text-left flex flex-col items-center" @submit.prevent="submit">
+              <form id="buy" class="bg-gradient-to-tr from-blue-700 via-sky-500 to-blue-300 max-w-lg mx-auto bg-white p-6 rounded-2xl shadow-lg text-left flex flex-col items-center">
                 <div class="my-8 flex justify-center">
                   <img src="https://i.ibb.co/kXnGVZj/logo.png" class=" w-72 h-20 mx-5 mb-6">
                 </div>
@@ -40,7 +40,7 @@
                 <div class="mb-8 w-full">
                   <textarea v-model="message" placeholder="Your Message" class="px-2 w-full h-32 rounded-xl bg-white text-black placeholder:px-2 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-sky-500"></textarea>
                 </div>
-                <button @click="submit" type="submit" class="flex justify-center mt-6  transition-all duration-300 ease-in-out hover:scale-110 bg-gradient-to-r from-sky-600 via-sky-300 to-sky-200 py-3 px-6 rounded-3xl text-white font-semibold  hover:from-blue-800 hover:via-blue-600 hover:to-blue-400 shadow-lg hover:shadow-xl"> {{buttonmsg}}</button>
+                <button type="submit" class="flex justify-center mt-6  transition-all duration-300 ease-in-out hover:scale-110 bg-gradient-to-r from-sky-600 via-sky-300 to-sky-200 py-3 px-6 rounded-3xl text-white font-semibold  hover:from-blue-800 hover:via-blue-600 hover:to-blue-400 shadow-lg hover:shadow-xl"> {{buttonmsg}}</button>
               </form>
             </div>
             
@@ -51,56 +51,24 @@
 <script>
 
 
-
   export default {
     name: "Home",
     data() {
       return {
-        plan: localStorage.getItem("selectedPlan"),
+        plan: "",
         notif: false,
         phone: "",
         instagram: "",
         ordersent: "",
         message: "",
         buttonmsg: "Send Order",
-        timer: null,
         contact: "no"
       };
     },
     
-    mounted() {
-        this.startTimer();
-    },
-    beforeDestroy() {
-        this.stopTimer();
-    },
     methods: {
 
-      getplan(){
-      this.plan = localStorage.getItem("selectedPlan");
-      },
-      startTimer() {
-            
-            this.timer = setInterval(() => {
-                this.getPlan();
-                
-            }, 500);
-            
-        },
-        stopTimer() {
-            clearInterval(this.timer);
-        },
-        getPlan() {
-            this.plan = localStorage.getItem("selectedPlan");
-        },
-    
-      async playVideo() {
-			try {
-				await this.example.play();
-			} catch (error) {
-				console.error('Error playing video:', error);
-			}
-		  },
+     
 
       chooseplan() {
         this.plan = 1;
@@ -119,12 +87,11 @@
         const ig = this.instagram;
         const plan = this.plan;
         const message = this.message;
-        const contact = this.contact;
   
         try {
           const response = await $fetch('/api/buyer', {
             method: "POST",
-            body: JSON.stringify({ phone, ig, plan, message, contact }),
+            body: JSON.stringify({ phone, ig, plan, message }),
             headers: {
               'Content-Type': 'application/json'
             }
@@ -134,13 +101,7 @@
             
             this.buttonmsg = "Send Order";
             this.notif = true;
-            if (this.plan != (1  || 2  || 3 )){
-              this.ordersent = "Thanks for your purchase! We will contact you as soon as possible!";
-            }else{
-              this.ordersent = "Thanks for reaching out to us, We will contact you as soon as possible! ";
-
-            }
-            
+            this.ordersent = "Thanks for your purchase! We will contact you as soon as possible!";
             setTimeout(() => { 
               this.notif = false;
               
