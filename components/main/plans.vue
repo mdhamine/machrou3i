@@ -17,7 +17,7 @@
                   </ul>
                   <div class=" text-2xl font-bold flex flex-col items-center">
                     <span class="mb-4 mt-14">1000 DZD / month</span>
-                    <a href="#buy" class="mt-3 transition-all duration-500 ease-in-out bg-white text-blue-600 py-2 px-6 rounded-3xl shadow-lg hover:bg-gray-200" @click="chooseplan">Buy Now</a>
+                    <a href="#buy" class="mt-3 transition-all duration-500 ease-in-out bg-white text-blue-600 py-2 px-6 rounded-3xl shadow-lg hover:bg-gray-200" >Buy Now</a>
                   </div>
                 </div>
           
@@ -31,7 +31,7 @@
                   </ul>
                   <div class="text-2xl font-bold flex flex-col items-center">
                     <span class="mb-4 mt-14">1500 DZD / month</span>
-                    <a href="#buy" class="mt-3 transition-all duration-500 ease-in-out bg-white text-blue-600 py-2 px-6 rounded-3xl shadow-lg hover:bg-gray-200" @click="chooseplan2">Buy Now</a>
+                    <a href="#buy" class="mt-3 transition-all duration-500 ease-in-out bg-white text-blue-600 py-2 px-6 rounded-3xl shadow-lg hover:bg-gray-200" >Buy Now</a>
                   </div>
                 </div>
     
@@ -45,7 +45,7 @@
                   </ul>
                   <div class=" text-2xl font-bold flex flex-col items-center">
                     <span class="mb-4 mt-14">2000 DZD / month</span>
-                    <a href="#buy" class="mt-3 transition-all duration-500 ease-in-out bg-white text-blue-600 py-2 px-6 rounded-3xl shadow-lg hover:bg-gray-200" @click="chooseplan3">Buy Now</a>
+                    <a href="#buy" class="mt-3 transition-all duration-500 ease-in-out bg-white text-blue-600 py-2 px-6 rounded-3xl shadow-lg hover:bg-gray-200" >Buy Now</a>
                   </div>
                 </div>
     
@@ -56,96 +56,7 @@
     </div>
 </template>
 
-<script>
- import Player from '@vimeo/player';
 
-
-  export default {
-    
-    name: "Home",
-
-    
-    data() {
-      return {
-        plan: "",
-        notif: false,
-        phone: "",
-        instagram: "",
-        ordersent: "",
-        message: "",
-        buttonmsg: "Send Order"
-      };
-    },
-    
-    methods: {
-      async playVideo() {
-			try {
-				await this.example.play();
-			} catch (error) {
-				console.error('Error playing video:', error);
-			}
-		  },
-
-      chooseplan() {
-        this.plan = 1;
-        try {
-          localStorage.setItem('selectedPlan', this.plan);
-        
-        } catch (error) {
-          console.log("looging this", error);
-        }
-        
-      },
-      chooseplan2() {
-        this.plan = 2;
-        localStorage.setItem('selectedPlan', this.plan);
-      },
-      chooseplan3() {
-        this.plan = 3;
-        localStorage.setItem('selectedPlan', this.plan);
-      },
-      async submit() {
-        this.buttonmsg = "loading...";
-        this.notif = false;
-
-        const phone = this.phone;
-        const ig = this.instagram;
-        const plan = this.plan;
-        const message = this.message;
-  
-        try {
-          const response = await $fetch('/api/buyer', {
-            method: "POST",
-            body: JSON.stringify({ phone, ig, plan, message }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-  
-          if (response.success === true) {
-            
-            this.buttonmsg = "Send Order";
-            this.notif = true;
-            this.ordersent = "Thanks for your purchase! We will contact you as soon as possible!";
-            setTimeout(() => { 
-              this.notif = false;
-              
-            }, 3000);
-          
-          }else {
- 
-            this.ordersent = "error sending your message !";
-            this.notif = true;
-            
-            
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
-  };
-  </script>
   
 
 <style lang="scss" scoped>
