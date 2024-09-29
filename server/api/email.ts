@@ -1,10 +1,11 @@
+
 import nodemailer from 'nodemailer';
 
 
 export default eventHandler(async (event) => {
   try {
     const body = await readBody(event);
-    const { name, phone, state, product, receiveremail,total , email, plan, ig } = body;
+    const { name, phone, state, cart, receiveremail,total , delivery } = body;
     
     if (receiveremail !== "ee") {
         console.log("ahhhh");
@@ -16,19 +17,31 @@ export default eventHandler(async (event) => {
         user: process.env.EMAIL, 
         pass: process.env.EMAIL_PASS,
       },
-    });
+    }); 
+    
+   
 
+    console.log("cart is ", body.cart);
     const mailOptions = {
       from: '"Sender Name" <' + process.env.EMAIL + '>',
       to:  receiveremail,
       subject: 'New Order',
-      text: `New order received:\n\nName: ${name}\nPhone: ${phone}\nState: ${state}\nProduct: ${product}`,
+      text: `New order received:`,
       html: `<p>New order received:</p>
              <ul>
                <li><strong>Name:</strong> ${name}</li>
                <li><strong>Phone:</strong> ${phone}</li>
                <li><strong>State:</strong> ${state}</li>
-               <li><strong>Product:</strong> ${product}</li>
+               <li><strong>State:</strong> ${delivery}</li>
+                <ul>
+                ${cart.map((item: { category: any; product: any; units: any;}) => `
+               <li>
+                 <strong>Category:</strong> ${item.category}, 
+                 <strong>Product:</strong> ${item.product.name}, 
+                 <strong>Units:</strong> ${item.units}, 
+                 
+               </li>`).join('')}
+               </ul>
                <li><strong>total:</strong> ${total}</li>
              </ul>`
     }; 
