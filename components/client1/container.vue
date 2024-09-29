@@ -7,7 +7,7 @@
           
         </div>
          
-        <div v-if="notif" role="alert" class="alert bg-[#030425] text-white mb-5 bg-gradient-to-r from-blue-700 via-blue-600 to-blue-400">
+        <div v-if="notif" role="alert" class="alert bg-[#030425] text-white mb-5 bg-gradient-to-r from-blue-800 via-blue-700 to-blue-600">
           <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round"  fill="white" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
@@ -68,6 +68,11 @@
           v-if="selectedCategory"
           class=" text-black placeholder:text-black border-blue-700 border-2 hover:border-4 rounded-2xl block p-2 mt-6 bg-white w-full"
         />
+        
+        <div class="flex justify-center">
+          <button class=" mt-8 shine rounded-full px-6 py-2 bg-gradient-to-bl from-blue-800 via-blue-600 to-blue-700 text-white" @click="addtocart"> add product 
+          </button>
+        </div>
 
         <select
           id="state"
@@ -75,7 +80,7 @@
           required
           class="block border-2 hover:border-4 mb-4 rounded-2xl my-6 mt-6 px-2  text-black bg-white w-full h-11 appearance-none focus:outline-none focus:ring-0 focus:border-blue-200 peer"
         >
-          <option disabled value="">Choose</option>
+          <option disabled value="">Wilaya</option>
                 <option value="Adrar">1⋅Adrar</option>
 								<option value="chlef">2⋅Chlef</option>
 								<option value="laghouat">3⋅Laghouat</option>
@@ -142,7 +147,7 @@
           required
           class="block border-2 hover:border-4 mb-4 rounded-2xl my-6 mt-6 px-2 text-black bg-white w-full h-11   appearance-none focus:outline-none focus:ring-0 focus:border-blue-200 peer"
         >
-          <option disabled value="">Deskstop</option>
+          <option  value="">Deskstop</option>
           <option value="adrar">Domicile</option>
         
         </select>
@@ -203,7 +208,7 @@ export default {
     input2: '',
     selectedCategory: '',
     selectedProduct: '',
-    selectedoption: '',
+    selectedprice: '',
     selectedState: '',
     modaltrue: false,
     modaltitle: "",
@@ -217,8 +222,9 @@ export default {
     notif: false,
     ordersent: "",
     name: name,
-    total: 0,
+    price: 0,
     units: "",
+    
   };
 },
 watch: {
@@ -250,11 +256,75 @@ methods: {
     return category ? category.products : [];
   },
   
-  getprice(selectedProduct) {
-      return selectedProduct.price
-    },
+  
+
+  async addtocart(){
 
 
+  
+  if (!this.selectedCategory || !this.selectedProduct ||  !this.units ||  !this.input2 ||  !this.input1 ) {
+    alert("fill product info and your phone number");
+  }
+  
+  const name = this.input1;
+  const phone = this.input2;
+  const product = this.selectedProduct;
+  this.price = this.selectedProduct.price * this.units;
+    
+  try {
+   
+    this.cart.push({ category: this.selectedCategory, product: this.selectedProduct, units: this.units, price: this.price });
+    
+    console.log("cart is ",this.cart);
+
+    this.notif = true;
+    this.ordersent = "Your product was added!";
+    setTimeout(() => { 
+    this.notif = false;
+      
+    }, 5000);
+
+
+  } catch (error) {
+    console.log(error);
+  }
+  
+  try {
+     
+      const res = await $fetch('/api/db', {
+        method: "POST",
+        body: {
+          name,
+          phone,
+          product,
+          
+         
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+   
+      if (res && res.success === true) {
+        console.log("Data sent");
+        
+        this.selectedCategory = '';
+        this.selectedProduct = '';
+        this.units= "";
+      
+        
+        
+      } else {
+        console.log("Failed", res);
+      }
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+    
+  
+  },
 
   async sendOrder() {
     this.loading = true;
@@ -265,18 +335,21 @@ methods: {
     const phone = this.input2;
     const state = this.selectedState;
     const delivery = this.delivery;
-    const product = this.selectedProduct;
     const image =  this.image;
-    const total = this.total;
+
+    const cart = this.cart;
+
+    const total = this.cart.reduce((x, item) => x + item.price, 0);
+    
     console.log("price is" , total);
 
 
 
 
-    if (!name || !phone || !state || !product) {
+    if (!name || !phone || !state || !cart) {
       this.showmodel('Error', 'Please fill out all fields!');
       this.loading = false;
-      return;j
+      return;
     }
     
     try {
@@ -286,7 +359,7 @@ methods: {
           name,
           phone,
           state,
-          product,
+          cart,
           delivery,
           image,
           receiveremail,
@@ -317,42 +390,7 @@ methods: {
             
     }
 
-      try {
-      const res = await $fetch('/api/db', {
-        method: "POST",
-        body: {
-          name,
-          phone,
-          state,
-          total,
-          product,
-          image,
-         
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-   
-      if (res && res.success === true) {
-        console.log("Data sent");
-        this.input1 = '';
-        this.input2 = '';
-        this.selectedCategory = '';
-        this.selectedProduct = '';
-        this.selectedState = '';
-        this.imageName = "";
-        this.units= "",
-        this.total = 0
-      } else {
-        console.log("Failed", res);
-      }
-
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
-    
+      
   },
   showmodel(title, message) {
     this.modaltitle = title;
