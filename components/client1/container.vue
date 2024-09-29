@@ -21,7 +21,7 @@
           class="mt-9 text-black text-right placeholder:text-black border-blue-700 border-2 hover:border-4 rounded-2xl block p-2  bg-white w-full"
         />
         <input
-          type="text"
+          type="number"
           v-model="input2"
           required
           placeholder="الهاتف"
