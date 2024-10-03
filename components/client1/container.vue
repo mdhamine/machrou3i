@@ -222,15 +222,19 @@ export default {
     price: 0,
     units: "",
     message: "",
-    
   };
 },
 watch: {
     selectedProduct(selectedProduct) {
-      this.total = getprice(selectedProduct) * this.units;
+      this.total = this.getprice(selectedProduct) * this.units;
     }
   },
 methods: {
+
+  getprice(selectedProduct){
+   const price = selectedProduct.price;
+   return price;
+  },
   async fileUploaded(event) {
       const target = event.target;
       if (target.files == null) return;
