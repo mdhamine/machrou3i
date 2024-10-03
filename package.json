@@ -13,6 +13,7 @@
     "@nuxt/ui": "^2.18.4",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@vimeo/player": "^2.24.0",
+    "mongoose": "^8.7.0",
     "daisyui": "^4.12.10",
     "flowbite": "^2.3.0",
     "jquery": "^3.7.1",
