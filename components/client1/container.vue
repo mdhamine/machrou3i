@@ -227,7 +227,7 @@ export default {
 },
 watch: {
     selectedProduct(selectedProduct) {
-      this.total = this.getprice(selectedProduct) * this.units;
+      this.total = getprice(selectedProduct) * this.units;
     }
   },
 methods: {
