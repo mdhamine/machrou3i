@@ -1,7 +1,15 @@
 <template>
   <div class="mx-auto bg-white min-h-screen">
+    <div class="flex justify-center pt-7 pb-7 ">
+      <button 
+          @click="saveall(cards)"
+          class="bg-blue-700 flex justify-center text-black font-bold  px-14 rounded-3xl py-4  mt-7 "
+        >
+          Save
+    </button>
+    </div>
     <div v-if="loading" class="text-center text-gray-500">Loading...</div>
-    <div v-else class="grid grid-cols-2 lg:grid-cols-2 gap-6 justify-center bg-white py-2">
+    <div v-else class="grid grid-cols-2 lg:grid-cols-4 gap-6 justify-center bg-white py-2">
       <div 
         v-for="card in cards" 
         :key="card._id" 
@@ -20,12 +28,8 @@
         </button>
       </div>
     </div>
-    <button 
-          @click="saveall(cards)"
-          class="bg-blue-700 flex justify-center text-black font-bold  px-4 py-2 rounded-lg mt-7 "
-        >
-          Save
-        </button>
+    
+    
   </div>
 </template>
 
