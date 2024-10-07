@@ -1,72 +1,87 @@
 <template>
-    <div class="flex flex-col justify-center items-center h-screen bg-white">
-      <div class="flex flex-col items-center rounded-lg bg-blue-600 p-8">
-        <input 
-          v-model="email" 
-          placeholder="Email" 
-          class="border bg-white rounded-md mb-4 p-2 w-80 text-black placeholder:text-black font-bold" 
-        />
-        <select 
-          v-model="coursetoadd" 
-          class="border bg-white rounded-md py-6 h-8 mt-6 mb-4  w-full  text-black placeholder:text-black font-bold"
-        >
-          <option disabled selected>Choose course</option>
-          <option value="1">Younes</option> 
-          <option value="2">English Speaker</option>
-          <option value="3">German</option>
-          <option value="4">French</option>
-        </select>
-      </div>
-      
-      <button 
-        @click="addCourseToUser" 
-        class="flex justify-center rounded-3xl bg-blue-700 text-white py-2 px-4 mt-8"
+  <div class="mx-auto bg-white min-h-screen">
+    <div v-if="loading" class="text-center text-gray-500">Loading...</div>
+    <div v-else class="grid grid-cols-2 lg:grid-cols-2 gap-6 justify-center bg-white py-2">
+      <div 
+        v-for="card in cards" 
+        :key="card._id" 
+        class="bg-blue-300 font-bold flex flex-col justify-center items-center text-black shadow-md rounded-lg px-7 py-7 h-full w-full mt-4 pb-8"
       >
-        Add Course
-      </button>
+        <h2 class="text-xl font-bold text-center">{{ card.title }}</h2>
+        <textarea 
+          v-model="card.desc" 
+          class="bg-white font-bold w-full h-32 lg:h-56 resize-none p-4 mt-2 rounded-md"
+        ></textarea>
+        <button 
+          @click="saveCard(card)"
+          class="bg-white text-black font-bold mt-2 px-4 py-2 rounded-lg"
+        >
+          Save
+        </button>
+      </div>
     </div>
-  </template>
-  
-  
-  <script>
-  export default {
-    data() {
-      return {
-        email: '',
-        coursetoadd: '',
+    <button 
+          @click="saveall(cards)"
+          class="bg-blue-700 flex justify-center text-black font-bold  px-4 py-2 rounded-lg mt-7 "
+        >
+          Save
+        </button>
+  </div>
+</template>
+
+
+<script>
+export default {
+  data() {
+    return {
+      cards: [],
+      loading: true,
+    };
+  },
+  async mounted() {
+
+    try {
+      const data = await $fetch('/api/testfe'); 
+      if (data && data.success) {  
+        this.cards = data.data;
+        console.log("data is", data.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch card data:', error);
+    } finally {
+      this.loading = false;
+    }
+  },
+  methods: {
+    async saveall(cards) {
+    console.log('Saving all cards:', cards);
+
+    for (const card of cards) {
+      try {
+        console.log('Processing card:', card);
+        await this.saveCard(card);  
+      } catch (error) {
+        console.error(`Error saving card with title: ${card.title || 'undefined'}`, error);
+      }
+    }
+  },
+    async saveCard(card) {
+      try {
+       
+        const response = await $fetch('/api/testex', {
+          method: 'POST',
+          body: { title: card.title, desc: card.desc },  
+        });
+        if (response.success == true) {
+          console.log("done", card);
+        } else {
+          
+        }
+      } catch (error) {
+        console.error('Error updating card:', error);
+        alert('Error updating card');
       }
     },
-    methods: {
-      async addCourseToUser() {
-        try {
-          const { data: user, error: fetchError } = await this.$supabase
-            .from('courses')
-            .select('*')
-            .eq('email', this.email)
-            .single()
-  
-          if (fetchError) throw fetchError
-  
-          if (user) {
-            const updatedCourses = user.courses ? [...user.courses, this.coursetoadd] : [this.coursetoadd]
-  
-            const { data, error: updateError } = await this.$supabase
-              .from('courses')
-              .update({ courses: updatedCourses })
-              .eq('email', this.email)
-  
-            if (updateError) throw updateError
-  
-            alert('Course added')
-          } else {
-            alert('User not found')
-          }
-        } catch (error) {
-          console.error('Error:', error.message)
-          alert('An error ')
-        }
-      },
-    },
-  }
-  </script>
-  
+  },
+};
+</script>
