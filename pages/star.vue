@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="w-full h-full p-6 flex justify-center">
     <h1>Text Modifier</h1>
     <textarea 
       v-model="userInput" 
