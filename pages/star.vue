@@ -33,7 +33,9 @@ export default {
     },
     copy(){
       navigator.clipboard.writeText(this.modifiedtext);
-      this.userinput = "";
+      setTimeout(() => {
+          this.userinput = "";
+        }, 5000);
     },
   },
 };
