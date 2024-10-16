@@ -12,10 +12,10 @@
       <h2>Modified Text:</h2>
       <p class="border border-gray-300 p-2 rounded">{{ modifiedText }}</p>
     </div>
-    <div class="mt-8">
+  </div>
+     <div class="mt-8">
     <button class="rounded-full px-8 py-3 bg-white text-black" @click="copy"> copier </button>
     </div>
-  </div>
 </template>
 
 <script>
