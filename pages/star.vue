@@ -4,7 +4,7 @@
     <textarea 
       v-model="userInput" 
       @input="modifyText" 
-      placeholder="Type your text here..."
+      placeholder="text."
       rows="5"
       class="w-full p-2 border border-gray-300 rounded"
     ></textarea>
@@ -32,13 +32,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-}
-textarea {
-  resize: none;
-}
-</style>
+
