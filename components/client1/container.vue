@@ -62,7 +62,7 @@
           </option>
         </select>
         
-        <div v-if="selectedProduct" class="mt-4 p-2 rounded-xl">
+        <div v-if="selectedProduct" class="block border-2 hover:border-4 rounded-2xl my-4 mt-6 text-black px-2 h-11 bg-white w-full appearance-none focus:outline-none focus:ring-0 focus:border-blue-200 peer">
           <h3 class="text-xl font-semibold">Preview:</h3>
           <img :src="product.preview" />
         </div>
