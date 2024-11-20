@@ -9,6 +9,7 @@ export const categories = [
         id: 1,
         name: "Product 1",
         price: 200,
+        img:"https://i.ibb.co/RzLLFBX/464787258-575533798228047-7490448197862651309-n.jpg",
         options: [
           { id: 1, name: "dldldd" },
           { id: 2, name: "dldl" },
