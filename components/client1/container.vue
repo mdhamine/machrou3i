@@ -61,7 +61,12 @@
             {{ product.name }} - السعر: {{ product.price }}
           </option>
         </select>
-
+        
+        <div v-if="selectedProduct" class="mt-4 p-2 rounded-xl">
+          <h3 class="text-xl font-semibold">Preview:</h3>
+          <p>{{ selectedProduct.preview }}</p>
+        </div>
+      
         <input
           type="number"
           v-model="units"
@@ -222,6 +227,7 @@ export default {
     price: 0,
     units: "",
     message: "",
+    preview: "",
   };
 },
 watch: {
@@ -233,6 +239,7 @@ methods: {
 
   getprice(selectedProduct){
    const price = selectedProduct.price;
+   const preview = selectedProduct.img;
    return price;
   },
   async fileUploaded(event) {
