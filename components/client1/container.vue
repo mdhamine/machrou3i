@@ -64,7 +64,7 @@
         
         <div v-if="selectedProduct" class="mt-4 p-2 rounded-xl">
           <h3 class="text-xl font-semibold">Preview:</h3>
-          <p>{{ selectedProduct.preview }}</p>
+          <img :src="product.preview" />
         </div>
       
         <input
